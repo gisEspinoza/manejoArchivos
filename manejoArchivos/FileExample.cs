@@ -42,6 +42,8 @@ namespace manejoArchivos
                     Console.ReadKey();
                     return true;
                 case "3":
+                    deleteData(); //llamado al metodo para eliminar
+                    Console.ReadKey();
                     return true;
                 case "4":
                     //mostrar el contenido del archivo
@@ -76,12 +78,21 @@ namespace manejoArchivos
             Console.Write("Edad: ");
             int age = Convert.ToInt32(Console.ReadLine());
 
-            //crear el archivo, uso de StreamWriter para escribir el archivo
-            using (StreamWriter sw = File.AppendText(getPath()))
+            //evaluar si el nombre ya esta registrado
+            if (search(fullname))
             {
-                sw.WriteLine("{0}; {1}", fullname, age);
-                sw.Close();
+                Console.WriteLine("El nombre ya esta registrado, ingrese otro");
             }
+            else 
+            {
+                //crear el archivo, uso de StreamWriter para escribir el archivo
+                using (StreamWriter sw = File.AppendText(getPath()))
+                {
+                    sw.WriteLine("{0}; {1}", fullname, age);
+                    sw.Close();
+                }
+            }
+            
         }
 
         //metodo para leer el contenido del archivo
@@ -96,7 +107,7 @@ namespace manejoArchivos
                 //variable para almacenar el contenido del archivo
                 string lines;
 
-                while((lines = reader.ReadLine()) != null) //mientras no se encuentre una linea vacia se ejecuta el ciclo
+                while ((lines = reader.ReadLine()) != null) //mientras no se encuentre una linea vacia se ejecuta el ciclo
                 {
                     string[] keyvalue = lines.Split(';');
                     if (keyvalue.Length == 2)
@@ -149,15 +160,53 @@ namespace manejoArchivos
                     foreach (KeyValuePair<object, object> values in temp)
                     {
                         sw.WriteLine("{0}; {1}", values.Key, values.Value);
-                       // sw.Close();
+                        // sw.Close();
                     }
                 }
-               
+
             }
             else
             {
                 Console.WriteLine("El registro no se encontro!");
             }
+        }
+
+        //metodo para eliminar
+        private static void deleteData()
+        {
+            //solicitar el elemnto a modificar
+            Console.Write("Escriba el nombre del estudiante a eliminar: ");
+            var name = Console.ReadLine();
+
+            //realizar la busqueda
+            if (search(name))
+            {
+                Console.WriteLine("El registro existe!");
+                //declarar un diccionario
+                Dictionary<object, object> temp = new Dictionary<object, object>();
+                temp = readFile();
+
+                temp.Remove(name); //eliminar elemento del diccionario
+
+                Console.WriteLine("El registro ha sido eliminado!");
+                File.Delete(getPath()); //eliminamos archivos y posteriormente lo volvemos a crear
+
+                using (StreamWriter sw = File.AppendText(getPath()))
+                {
+                    //leer diccionario temporal y almacenar los elementos en el archivo
+                    foreach (KeyValuePair<object, object> values in temp)
+                    {
+                        sw.WriteLine("{0}; {1}", values.Key, values.Value);
+                        // sw.Close();
+                    }
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("El registro no se encontro!");
+            }
+
         }
     }
 }
