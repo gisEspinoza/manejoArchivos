@@ -20,6 +20,12 @@ namespace manejoArchivos
             Console.ReadKey();
         }
 
+        public static void saludo()
+        {
+            Console.WriteLine("Este es un mensaje de prueba :)");
+        }
+
+
         private static bool Menu()
         {
             //crear el menu para mostrar al usuario
