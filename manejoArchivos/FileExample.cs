@@ -96,7 +96,7 @@ namespace manejoArchivos
                 //variable para almacenar el contenido del archivo
                 string lines;
 
-                while((lines = reader.ReadLine()) != null) //mientras no se encuentre una linea vacia se ejecuta el ciclo
+                while ((lines = reader.ReadLine()) != null) //mientras no se encuentre una linea vacia se ejecuta el ciclo
                 {
                     string[] keyvalue = lines.Split(';');
                     if (keyvalue.Length == 2)
@@ -149,15 +149,21 @@ namespace manejoArchivos
                     foreach (KeyValuePair<object, object> values in temp)
                     {
                         sw.WriteLine("{0}; {1}", values.Key, values.Value);
-                       // sw.Close();
+                        // sw.Close();
                     }
                 }
-               
+
             }
             else
             {
                 Console.WriteLine("El registro no se encontro!");
             }
         }
+
+        private void mensaje()
+        {
+            Console.WriteLine("Edwin Ulloa");
+        }
+}
     }
 }
